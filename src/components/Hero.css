@@ -1,0 +1,134 @@
+.hero {
+  max-width: 1220px;
+  margin: 32px auto 0;
+  padding: 32px 20px 48px;
+}
+
+.hero__content {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(220, 122, 67, 0.12);
+  color: #a84d22;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  margin: 18px 0 18px;
+  font-size: clamp(2.9rem, 5vw, 5rem);
+  line-height: 0.96;
+  letter-spacing: -0.06em;
+  color: #1b1b1b;
+}
+
+.hero__copy {
+  margin: 0 auto;
+  max-width: 620px;
+  font-size: 1.08rem;
+  line-height: 1.7;
+  color: #505050;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.hero__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: none;
+  border-radius: 999px;
+  padding: 15px 22px;
+  font-size: 0.98rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hero__button:hover {
+  transform: translateY(-1px);
+}
+
+.hero__button--primary {
+  background: #111111;
+  color: #ffffff;
+  box-shadow: 0 12px 30px rgba(17, 17, 17, 0.18);
+}
+
+.hero__button--secondary {
+  background: rgba(255, 255, 255, 0.9);
+  color: #1b1b1b;
+  border: 1px solid rgba(17, 17, 17, 0.08);
+}
+
+.button-icon,
+.play-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.play-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f4efe9;
+}
+
+.hero__stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 110px;
+}
+
+.stat-item strong {
+  font-size: 1.5rem;
+  letter-spacing: -0.06em;
+  color: #111111;
+}
+
+.stat-item span {
+  color: #656565;
+  font-size: 0.86rem;
+}
+
+@media (max-width: 560px) {
+  .hero {
+    margin-top: 18px;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .hero h1 {
+    letter-spacing: -0.05em;
+  }
+}
