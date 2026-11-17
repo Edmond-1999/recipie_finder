@@ -28,7 +28,7 @@ const mapMealDetail = (meal) => {
   }
 
   const steps = meal.strInstructions
-    ?.split(/\r\n|\n|\.)\s+/)
+    ?.split(/\r\n|\n|\.\s+/)
     .map((step) => step.trim())
     .filter(Boolean)
     .slice(0, 5) || ['No instructions available.']
@@ -57,6 +57,28 @@ const mapMealDetail = (meal) => {
   }
 }
 
+export const groupRecipesByCategory = (recipes = []) => {
+  const groupedRecipes = recipes.reduce((groups, recipe) => {
+    const category = recipe.category || 'Other'
+
+    if (!groups[category]) {
+      groups[category] = []
+    }
+
+    groups[category].push(recipe)
+    return groups
+  }, {})
+
+  return {
+    allRecipes: recipes,
+    groupedRecipes,
+    categories: Object.entries(groupedRecipes).map(([name, items]) => ({
+      name,
+      recipes: items,
+    })),
+  }
+}
+
 export const recipeApi = createApi({
   reducerPath: 'recipeApi',
   baseQuery: fetchBaseQuery({
@@ -64,8 +86,14 @@ export const recipeApi = createApi({
   }),
   endpoints: (builder) => ({
     getRecipes: builder.query({
-      query: () => 'search.php?s=',
-      transformResponse: (response) => (response.meals || []).slice(0, 6).map(mapMeal),
+      query: (searchTerm = '') => {
+        const normalizedTerm = searchTerm.trim()
+        return `search.php?s=${encodeURIComponent(normalizedTerm)}`
+      },
+      transformResponse: (response) => {
+        const recipes = (response.meals || []).map(mapMeal)
+        return groupRecipesByCategory(recipes)
+      },
     }),
     getRecipeById: builder.query({
       query: (id) => `lookup.php?i=${id}`,

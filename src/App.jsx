@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Navbar from './components/Navbar'
@@ -8,15 +9,17 @@ import { store } from './app/store'
 import './App.css'
 
 function App() {
+  const [searchTerm, setSearchTerm] = useState('')
+
   return (
     <Provider store={store}>
       <BrowserRouter>
         <div className="app-shell">
-          <Navbar />
+          <Navbar value={searchTerm} onChange={setSearchTerm} />
           <Hero />
 
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<HomePage searchTerm={searchTerm} />} />
             <Route path="/recipe/:recipeId" element={<RecipieDetail />} />
           </Routes>
         </div>
