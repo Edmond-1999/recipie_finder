@@ -1,4 +1,3 @@
-import { FiArrowRight, FiPlay } from 'react-icons/fi'
 import './Hero.css'
 
 const stats = [
@@ -19,20 +18,6 @@ function Hero() {
           Discover quick weeknight meals, comforting classics, and vibrant dishes
           that turn everyday ingredients into something memorable.
         </p>
-
-        <div className="hero__actions">
-          <button type="button" className="hero__button hero__button--primary">
-            Explore recipes
-            <FiArrowRight className="button-icon" />
-          </button>
-
-          <button type="button" className="hero__button hero__button--secondary">
-            <span className="play-badge">
-              <FiPlay className="play-icon" />
-            </span>
-            How it works
-          </button>
-        </div>
 
         <div className="hero__stats" aria-label="Recipe stats">
           {stats.map((item) => (

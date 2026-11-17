@@ -40,61 +40,6 @@
   color: #505050;
 }
 
-.hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  margin-top: 28px;
-}
-
-.hero__button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  border: none;
-  border-radius: 999px;
-  padding: 15px 22px;
-  font-size: 0.98rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.hero__button:hover {
-  transform: translateY(-1px);
-}
-
-.hero__button--primary {
-  background: #111111;
-  color: #ffffff;
-  box-shadow: 0 12px 30px rgba(17, 17, 17, 0.18);
-}
-
-.hero__button--secondary {
-  background: rgba(255, 255, 255, 0.9);
-  color: #1b1b1b;
-  border: 1px solid rgba(17, 17, 17, 0.08);
-}
-
-.button-icon,
-.play-icon {
-  width: 16px;
-  height: 16px;
-}
-
-.play-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: #f4efe9;
-}
-
 .hero__stats {
   display: flex;
   flex-wrap: wrap;
