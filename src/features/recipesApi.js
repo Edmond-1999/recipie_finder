@@ -1,4 +1,6 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+// This file handles the API calls in a simple way.
+// Beginners can understand each step: fetch -> wait -> convert -> return.
+const API_BASE_URL = 'https://www.themealdb.com/api/json/v1/1/'
 
 const mapMeal = (meal) => ({
   id: meal.idMeal,
@@ -58,51 +60,47 @@ const mapMealDetail = (meal) => {
 }
 
 export const groupRecipesByCategory = (recipes = []) => {
-  const groupedRecipes = recipes.reduce((groups, recipe) => {
+  const groupedRecipes = {}
+
+  recipes.forEach((recipe) => {
     const category = recipe.category || 'Other'
 
-    if (!groups[category]) {
-      groups[category] = []
+    if (!groupedRecipes[category]) {
+      groupedRecipes[category] = []
     }
 
-    groups[category].push(recipe)
-    return groups
-  }, {})
+    groupedRecipes[category].push(recipe)
+  })
+
+  const categories = Object.entries(groupedRecipes).map(([name, items]) => ({
+    name,
+    recipes: items,
+  }))
 
   return {
     allRecipes: recipes,
     groupedRecipes,
-    categories: Object.entries(groupedRecipes).map(([name, items]) => ({
-      name,
-      recipes: items,
-    })),
+    categories,
   }
 }
 
-export const recipeApi = createApi({
-  reducerPath: 'recipeApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: 'https://www.themealdb.com/api/json/v1/1/',
-  }),
-  endpoints: (builder) => ({
-    getRecipes: builder.query({
-      query: (searchTerm = '') => {
-        const normalizedTerm = searchTerm.trim()
-        return `search.php?s=${encodeURIComponent(normalizedTerm)}`
-      },
-      transformResponse: (response) => {
-        const recipes = (response.meals || []).map(mapMeal)
-        return groupRecipesByCategory(recipes)
-      },
-    }),
-    getRecipeById: builder.query({
-      query: (id) => `lookup.php?i=${id}`,
-      transformResponse: (response) => {
-        const meal = response.meals?.[0]
-        return meal ? mapMealDetail(meal) : null
-      },
-    }),
-  }),
-})
+export async function getRecipes(searchTerm = '') {
+  const cleanedSearch = searchTerm.trim()
+  const url = `${API_BASE_URL}search.php?s=${encodeURIComponent(cleanedSearch)}`
 
-export const { useGetRecipesQuery, useGetRecipeByIdQuery } = recipeApi
+  const response = await fetch(url)
+  const data = await response.json()
+  const recipes = (data.meals || []).map(mapMeal)
+
+  return groupRecipesByCategory(recipes)
+}
+
+export async function getRecipeById(recipeId) {
+  const url = `${API_BASE_URL}lookup.php?i=${recipeId}`
+
+  const response = await fetch(url)
+  const data = await response.json()
+  const meal = data.meals?.[0]
+
+  return meal ? mapMealDetail(meal) : null
+}

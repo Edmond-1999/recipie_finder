@@ -1,3 +1,4 @@
+// This page shows one recipe in more detail.
 import {
   FiArrowLeft,
   FiCheckCircle,
@@ -7,12 +8,46 @@ import {
   FiUsers,
 } from 'react-icons/fi'
 import { Link, useParams } from 'react-router-dom'
-import { useGetRecipeByIdQuery } from '../features/recipesApi'
+import { useEffect, useState } from 'react'
+import { getRecipeById } from '../features/recipesApi'
 import './RecipieDetail.css'
 
 function RecipieDetail() {
   const { recipeId } = useParams()
-  const { data: recipe, isLoading, error } = useGetRecipeByIdQuery(recipeId)
+  const [recipe, setRecipe] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    let isMounted = true
+
+    async function loadRecipe() {
+      setIsLoading(true)
+      setError('')
+
+      try {
+        const data = await getRecipeById(recipeId)
+
+        if (isMounted) {
+          setRecipe(data)
+        }
+      } catch {
+        if (isMounted) {
+          setError('Recipe not found.')
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false)
+        }
+      }
+    }
+
+    loadRecipe()
+
+    return () => {
+      isMounted = false
+    }
+  }, [recipeId])
 
   if (isLoading) {
     return <main className="recipe-detail">Loading recipe...</main>

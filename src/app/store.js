@@ -1,10 +1,2 @@
-import { configureStore } from '@reduxjs/toolkit'
-import { recipeApi } from '../features/recipesApi'
-
-export const store = configureStore({
-  reducer: {
-    [recipeApi.reducerPath]: recipeApi.reducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(recipeApi.middleware),
-})
+// This file is kept simple so beginners do not need Redux to understand the app.
+export const store = {}

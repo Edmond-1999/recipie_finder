@@ -1,17 +1,51 @@
+// This page loads the recipes and shows them on the home screen.
 import { useEffect, useState } from 'react'
 import RecipieCard from '../components/RecipieCard'
-import { useGetRecipesQuery } from '../features/recipesApi'
+import { getRecipes } from '../features/recipesApi'
 import './HomePage.css'
 
 function HomePage({ searchTerm = '' }) {
-  const { data, isLoading, error } = useGetRecipesQuery(searchTerm)
+  const [recipeCollections, setRecipeCollections] = useState({
+    allRecipes: [],
+    groupedRecipes: {},
+    categories: [],
+  })
   const [selectedCategory, setSelectedCategory] = useState('all')
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState('')
 
   useEffect(() => {
-    setSelectedCategory('all')
+    let isMounted = true
+
+    async function loadRecipes() {
+      setIsLoading(true)
+      setError('')
+
+      try {
+        const result = await getRecipes(searchTerm)
+
+        if (isMounted) {
+          setRecipeCollections(result)
+        }
+      } catch {
+        if (isMounted) {
+          setError('Failed to load recipes')
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false)
+          setSelectedCategory('all')
+        }
+      }
+    }
+
+    loadRecipes()
+
+    return () => {
+      isMounted = false
+    }
   }, [searchTerm])
 
-  const recipeCollections = data || { allRecipes: [], groupedRecipes: {}, categories: [] }
   const categories = recipeCollections.categories || []
   const visibleRecipes =
     selectedCategory === 'all'
@@ -31,7 +65,7 @@ function HomePage({ searchTerm = '' }) {
       </div>
 
       {isLoading && <p className="status-message">Loading recipes...</p>}
-      {error && <p className="status-message error">{'Failed to load recipes'}</p>}
+      {error && <p className="status-message error">{error}</p>}
 
       {!isLoading && !error && (
         <>
